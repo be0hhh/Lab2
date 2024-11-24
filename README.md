@@ -50,7 +50,6 @@
 |-------------|--------------------|-----------------|----------------|
 | N (Число 1) | Натуральное число | 1  | 10<sup>9</sup> |
 | symbs[i][j]  | Символ | a | Z |
-| symbsdef[i][j]  | Символ | a | Z |
 
 На вход сначала подается целое число N, то есть integer, так как вводим количество, то N целое положительное, то есть натуральное.
 После этого вводятся символы в массив, то есть char, так как в условии сказано "строчные и заглавные буквы латинского алфавита".
@@ -70,10 +69,8 @@
 |-----|--------------|
 | N   | integer      |
 | symbs | char [][] |
-| symbsdef | char [][] |
 - число N - integer, размерность матрицы
 - symbs - char, так как в матрице хранятся символы
-- symbsdef - char, копия symbs
 
 
 ### 4. Алгоритм и математическая модель
@@ -98,7 +95,6 @@ public class Main {
         System.out.println("Введите размер массива N:");
         int N = in.nextInt();
         char[][] symbs = new char[N][N];
-        char[][] symbsdef = new char[N][N];
 
         // 1.считывает с консоли размер массива N, затем элементы массива
         // размером N*N.
@@ -106,7 +102,6 @@ public class Main {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 symbs[i][j] = in.next().charAt(0);
-                symbsdef[i][j] = symbs[i][j]; // Копирование в symbsdef
             }
         }
 
@@ -186,7 +181,7 @@ public class Main {
             y--;
         }
 
-        System.out.print(symbsdef[x][y] + " "); // Центральный элемент
+        System.out.print(symbs[x][y] + " "); // Центральный элемент
 
 // Направления движения: вверх, влево, вниз, вправо
         int[][] orientation = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
@@ -205,7 +200,7 @@ public class Main {
 
                     // Проверка на выход за пределы массива
                     if (x >= 0 && x < N && y >= 0 && y < N) {
-                        System.out.print(symbsdef[x][y] + " ");
+                        System.out.print(symbs[x][y] + " ");
                         count++;
                     }
                 }
@@ -220,12 +215,12 @@ public class Main {
         System.out.println("\nЗашифрованный массив:");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (Character.isUpperCase(symbsdef[i][j])) { // Если буква заглавная, делаем её строчной
-                    symbsdef[i][j] = Character.toLowerCase(symbsdef[i][j]);
-                } else if (Character.isLowerCase(symbsdef[i][j])) { // Если буква строчная, делаем её заглавной
-                    symbsdef[i][j] = Character.toUpperCase(symbsdef[i][j]);
+                if (Character.isUpperCase(symbs[i][j])) { // Если буква заглавная, делаем её строчной
+                    symbs[i][j] = Character.toLowerCase(symbs[i][j]);
+                } else if (Character.isLowerCase(symbs[i][j])) { // Если буква строчная, делаем её заглавной
+                    symbs[i][j] = Character.toUpperCase(symbs[i][j]);
                 }
-                System.out.print(symbsdef[i][j] + " "); // Вывод символа
+                System.out.print(symbs[i][j] + " "); // Вывод символа
             }
             System.out.println(); // Переход на новую строку после каждого ряда
         }
@@ -269,6 +264,7 @@ public class Main {
 }
 
 
+
 ```
 
 
@@ -297,11 +293,11 @@ a b c
 b c a 
 Символ(ы), которые встречаются чаще всего: a b c 
 Элементы массива в виде спирали (против часовой стрелки):
-a b a b c b a c c 
+b a b a b c a c c 
 Зашифрованный массив:
-A B C 
 B A C 
-C B A   
+A B C 
+B C A  
 ```
 
 2. Тест на что-то еще
