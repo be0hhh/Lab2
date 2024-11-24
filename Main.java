@@ -2,12 +2,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+
+
         // Считывание массива
         System.out.println("Введите размер массива N:");
         int N = in.nextInt();
         char[][] symbs = new char[N][N];
         char[][] symbsdef = new char[N][N];
-        // 1.считывает с консоли размер массива N, затем элементы массива размером N*N
+
+        // 1.считывает с консоли размер массива N, затем элементы массива
+        // размером N*N.
         System.out.println("Введите элементы массива построчно через пробел, в каждой строке по N элементов:");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -15,11 +19,17 @@ public class Main {
                 symbsdef[i][j] = symbs[i][j]; // Копирование в symbsdef
             }
         }
+
+
+
+
         // Сортировка столбцов по количеству гласных с использованием 3 подпрограмм
         // Переменная k в данном контексте отвечает за текущий индекс столбца,
         // который сравнивается с соседним столбцом в процессе сортировки массива по количеству гласных.
         // Алгоритм основан на пузырьковой сортировке, она сравнивает два соседних столбца с индексами k и k+1
         // и при необходимости меняет их местами, чтобы столбцы с меньшим количеством гласных оказались раньше.
+
+
         for (int j = 0; j < symbs.length - 1; j++) {
             for (int k = 0; k < symbs.length - 1 - j; k++) {
                 int glas1 = countGlass(symbs, k, N);
@@ -29,6 +39,8 @@ public class Main {
                 }
             }
         }
+
+
         // 2.выводит измененный массив
         System.out.println("Отсортированный массив:");
         for (int i = 0; i < N; i++) {
@@ -37,6 +49,8 @@ public class Main {
             }
             System.out.println();
         }
+
+
         // 3. нахождение самого частого элемента (без подрограмм)
         int q = 'z' - 'a' + 1; // удобная переменная для знания количества букв в нижнем регистре
         int[] freq = new int[q]; // Массив для подсчёта частот букв
@@ -52,60 +66,66 @@ public class Main {
                 }
             }
         }
-            // поиск количества самого частого элемента
-                    int maxF = 0;
-                    for (int i = 0; i < freq.length; i++) {
-                        int FFreq = freq[i];
-                        if (FFreq > maxF) {
-                            maxF = FFreq;
-                        }
-                    }
-            // Поиск всех символов с максимальной частотой
-                    System.out.print("Символ(ы), которые встречаются чаще всего: ");
-                    for (int i = 0; i < q; i++) {
-                        if (freq[i] == maxF) {
-                            System.out.print((char) (i + 'a') + " "); // Преобразуем индекс обратно в символ
-                        }
-                    }
-        // 4. спираль (это ужас)
-        System.out.println("\n Элементы массива в виде спирали (против часовой стрелки):");
-        // Найдём центр массива
-        int centerX = N / 2; //по Ox
-        int centerY = N / 2; //по Oy
-        // Если N чётное, сместимся к ближайшему левому верхнему элементу
-        if (N % 2 == 0) {
-            centerX--;
-            centerY--;
+
+// поиск количества самого частого элемента
+        int maxF = 0;
+        for (int i = 0; i < freq.length; i++) {
+            int FFreq = freq[i];
+            if (FFreq > maxF) {
+                maxF = FFreq;
+            }
         }
-        // Направления движения: вверх, влево, вниз, вправо
+
+// Поиск всех символов с максимальной частотой
+        System.out.print("Символ(ы), которые встречаются чаще всего: ");
+        for (int i = 0; i < q; i++) {
+            if (freq[i] == maxF) {
+                System.out.print((char) (i + 'a') + " "); // Преобразуем индекс обратно в символ
+            }
+        }
+        // 4. спираль (это ужас)
+        System.out.println("\nЭлементы массива в виде спирали (против часовой стрелки):");
+
+// Начальные координаты для центра
+        int x = N / 2;
+        int y = N / 2;
+
+// Если N чётное, сдвигаем центр влево и вверх
+        if (N % 2 == 0) {
+            x--;
+            y--;
+        }
+
+        System.out.print(symbsdef[x][y] + " "); // Центральный элемент
+
+// Направления движения: вверх, влево, вниз, вправо
         int[][] orientation = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
         int currentNapravlenie = 0; // Текущее направление движения
         int steps = 1;    // Количество шагов в текущем сегменте
-        int x = centerX;
-        int y = centerY;
-        System.out.print(symbsdef[x][y] + " "); // Центральный элемент
-        while (steps < N) {
+        int count = 1;    // Счётчик пройденных элементов
+
+        // Пока не прошли все элементы массива
+        while (count < N * N) {
             // Два сегмента одинаковой длины перед увеличением длины сегмента
             for (int segment = 0; segment < 2; segment++) { // Повторяем дважды для каждого направления (по два сегмента в каждом направлении)
                 for (int step = 0; step < steps; step++) { // Для текущего сегмента выполняем 'steps' шагов
-                    x += orientation[currentNapravlenie][0]; // Изменяем координату x в зависимости от текущего направления
-                    y += orientation[currentNapravlenie][1]; // Изменяем координату y в зависимости от текущего направления
-                    System.out.print(symbsdef[x][y] + " "); // Выводим текущий символ массива на позиции (x, y)
+                    // Обновляем координаты
+                    x += orientation[currentNapravlenie][0];
+                    y += orientation[currentNapravlenie][1];
+
+                    // Проверка на выход за пределы массива
+                    if (x >= 0 && x < N && y >= 0 && y < N) {
+                        System.out.print(symbsdef[x][y] + " ");
+                        count++;
+                    }
                 }
                 // После завершения одного сегмента (например, движения вверх или влево), меняем направление
                 currentNapravlenie = (currentNapravlenie + 1) % 4;
-                // так как направления 4, то при достижении 4 напрвления опять,
-                // то есть первого, мы меняем его
             }
             // Увеличиваем количество шагов для следующей пары сегментов
             steps++;
         }
-        // Обход последнего сегмента (границы массива)
-        for (int step = 0; step < steps - 1; step++) {
-            x += orientation[currentNapravlenie][0];
-            y += orientation[currentNapravlenie][1];
-            System.out.print(symbsdef[x][y] + " ");
-        }
+
         // 5. зашифрованный массив
         System.out.println("\nЗашифрованный массив:");
         for (int i = 0; i < N; i++) {
@@ -121,6 +141,10 @@ public class Main {
         }
 
     }
+
+
+
+
     // блок подпрограмм
     // делает подсчёт количества гласных в столбце
     public static int countGlass(char[][] symbs, int columm, int stroka) {
@@ -133,6 +157,7 @@ public class Main {
         }
         return count;
     }
+
     // подсчёт суммы аски-кодов в столбце
     public static int sumAsc(char[][] symbs, int column, int stroka) {
         int sum = 0;
@@ -141,6 +166,7 @@ public class Main {
         }
         return sum;
     }
+
     // перемещение букв в строках
     public static void swapColonn(char[][] symbs, int column1, int column2, int stroka) {
         for (int i = 0; i < stroka; i++) {
@@ -149,5 +175,5 @@ public class Main {
             symbs[i][column2] = temp;
         }
     }
-    // конец блока подпрограмм
+    // конец первого блока подпрограмм
 }
