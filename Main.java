@@ -2,34 +2,23 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-
-
         // Считывание массива
         System.out.println("Введите размер массива N:");
         int N = in.nextInt();
         char[][] symbs = new char[N][N];
-        char[][] symbsdef = new char[N][N];
-
         // 1.считывает с консоли размер массива N, затем элементы массива
         // размером N*N.
         System.out.println("Введите элементы массива построчно через пробел, в каждой строке по N элементов:");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 symbs[i][j] = in.next().charAt(0);
-                symbsdef[i][j] = symbs[i][j]; // Копирование в symbsdef
             }
         }
-
-
-
-
         // Сортировка столбцов по количеству гласных с использованием 3 подпрограмм
         // Переменная k в данном контексте отвечает за текущий индекс столбца,
         // который сравнивается с соседним столбцом в процессе сортировки массива по количеству гласных.
         // Алгоритм основан на пузырьковой сортировке, она сравнивает два соседних столбца с индексами k и k+1
         // и при необходимости меняет их местами, чтобы столбцы с меньшим количеством гласных оказались раньше.
-
-
         for (int j = 0; j < symbs.length - 1; j++) {
             for (int k = 0; k < symbs.length - 1 - j; k++) {
                 int glas1 = countGlass(symbs, k, N);
@@ -39,8 +28,6 @@ public class Main {
                 }
             }
         }
-
-
         // 2.выводит измененный массив
         System.out.println("Отсортированный массив:");
         for (int i = 0; i < N; i++) {
@@ -49,8 +36,6 @@ public class Main {
             }
             System.out.println();
         }
-
-
         // 3. нахождение самого частого элемента (без подрограмм)
         int q = 'z' - 'a' + 1; // удобная переменная для знания количества букв в нижнем регистре
         int[] freq = new int[q]; // Массив для подсчёта частот букв
@@ -66,7 +51,6 @@ public class Main {
                 }
             }
         }
-
 // поиск количества самого частого элемента
         int maxF = 0;
         for (int i = 0; i < freq.length; i++) {
@@ -75,7 +59,6 @@ public class Main {
                 maxF = FFreq;
             }
         }
-
 // Поиск всех символов с максимальной частотой
         System.out.print("Символ(ы), которые встречаются чаще всего: ");
         for (int i = 0; i < q; i++) {
@@ -85,25 +68,20 @@ public class Main {
         }
         // 4. спираль (это ужас)
         System.out.println("\nЭлементы массива в виде спирали (против часовой стрелки):");
-
 // Начальные координаты для центра
         int x = N / 2;
         int y = N / 2;
-
 // Если N чётное, сдвигаем центр влево и вверх
         if (N % 2 == 0) {
             x--;
             y--;
         }
-
-        System.out.print(symbsdef[x][y] + " "); // Центральный элемент
-
+        System.out.print(symbs[x][y] + " "); // Центральный элемент
 // Направления движения: вверх, влево, вниз, вправо
         int[][] orientation = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
         int currentNapravlenie = 0; // Текущее направление движения
         int steps = 1;    // Количество шагов в текущем сегменте
         int count = 1;    // Счётчик пройденных элементов
-
         // Пока не прошли все элементы массива
         while (count < N * N) {
             // Два сегмента одинаковой длины перед увеличением длины сегмента
@@ -115,7 +93,7 @@ public class Main {
 
                     // Проверка на выход за пределы массива
                     if (x >= 0 && x < N && y >= 0 && y < N) {
-                        System.out.print(symbsdef[x][y] + " ");
+                        System.out.print(symbs[x][y] + " ");
                         count++;
                     }
                 }
@@ -124,27 +102,21 @@ public class Main {
             }
             // Увеличиваем количество шагов для следующей пары сегментов
             steps++;
-        }
-
+        } 
         // 5. зашифрованный массив
         System.out.println("\nЗашифрованный массив:");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (Character.isUpperCase(symbsdef[i][j])) { // Если буква заглавная, делаем её строчной
-                    symbsdef[i][j] = Character.toLowerCase(symbsdef[i][j]);
-                } else if (Character.isLowerCase(symbsdef[i][j])) { // Если буква строчная, делаем её заглавной
-                    symbsdef[i][j] = Character.toUpperCase(symbsdef[i][j]);
+                if (Character.isUpperCase(symbs[i][j])) { // Если буква заглавная, делаем её строчной
+                    symbs[i][j] = Character.toLowerCase(symbs[i][j]);
+                } else if (Character.isLowerCase(symbs[i][j])) { // Если буква строчная, делаем её заглавной
+                    symbs[i][j] = Character.toUpperCase(symbs[i][j]);
                 }
-                System.out.print(symbsdef[i][j] + " "); // Вывод символа
+                System.out.print(symbs[i][j] + " "); // Вывод символа
             }
             System.out.println(); // Переход на новую строку после каждого ряда
         }
-
     }
-
-
-
-
     // блок подпрограмм
     // делает подсчёт количества гласных в столбце
     public static int countGlass(char[][] symbs, int columm, int stroka) {
