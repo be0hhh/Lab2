@@ -141,9 +141,11 @@ public class Main {
     // перемещение букв в строках
     public static void swapColonn(char[][] symbs, int column1, int column2, int stroka) {
         for (int i = 0; i < stroka; i++) {
-            symbs[i][column1] = symbs[i][column2];   // попарная замена символа на месте i и столбце 1/2
-            symbs[i][column2] = symbs[i][column1];
+            char temp = symbs[i][column1];
+            symbs[i][column1] = symbs[i][column2];
+            symbs[i][column2] = temp;
         }
     }
+
     // конец первого блока подпрограмм
 }
