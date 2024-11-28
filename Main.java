@@ -14,22 +14,56 @@ public class Main {
                 symbs[i][j] = in.next().charAt(0);
             }
         }
-        // Сортировка столбцов по количеству гласных с использованием 3 подпрограмм
+        // Сортировка столбцов по количеству гласных
         // Переменная k в данном контексте отвечает за текущий индекс столбца,
         // который сравнивается с соседним столбцом в процессе сортировки массива по количеству гласных.
         // Алгоритм основан на пузырьковой сортировке, она сравнивает два соседних столбца с индексами k и k+1
         // и при необходимости меняет их местами, чтобы столбцы с меньшим количеством гласных оказались раньше.
-        for (int j = 0; j < symbs.length - 1; j++) {
-            for (int k = 0; k < symbs.length - 1 - j; k++) {
-                int glas1 = countGlass(symbs, k, N);
-                int glas2 = countGlass(symbs, k + 1, N);
-                if ((glas1 > glas2) || (glas1 == glas2) && (sumAsc(symbs, k, N) > sumAsc(symbs, k + 1, N))) {
-                    // если гласных букв в предыдущем столбце больше или же их одинаковое количество, но сумма ascii больше, чем в последующем, то происходит замена гласных
-                    swapColonn(symbs, k, k + 1, N);
+        for (int j = 0; j < N - 1; j++) {
+            for (int k = 0; k < N - 1 - j; k++) {
+
+                // Подсчет гласных в столбце k
+                int glas1 = 0;
+                for (int i = 0; i < N; i++) {
+                    char character = symbs[i][k];
+                    if ("aAeEiIoOuUyY".indexOf(character) >= 0) {
+                        glas1++;
+                    }
+                }
+
+                // Подсчет гласных в столбце k+1
+                int glas2 = 0;
+                for (int i = 0; i < N; i++) {
+                    char ch = symbs[i][k + 1];
+                    if ("aAeEiIoOuUy".indexOf(ch) >= 0) {
+                        glas2++;
+                    }
+                }
+
+                // Подсчет суммы ASCII в столбце k
+                int sum1 = 0;
+                for (int i = 0; i < N; i++) {
+                    sum1 += symbs[i][k];
+                }
+
+                // Подсчет суммы ASCII в столбце k+1
+                int sum2 = 0;
+                for (int i = 0; i < N; i++) {
+                    sum2 += symbs[i][k + 1];
+                }
+
+                // Сравнение и замена столбцов
+                if ((glas1 > glas2) || (glas1 == glas2 && sum1 > sum2)) {
+                    for (int i = 0; i < N; i++) {
+                        char temp = symbs[i][k];
+                        symbs[i][k] = symbs[i][k + 1];
+                        symbs[i][k + 1] = temp;
+                    }
                 }
             }
         }
-        // 2.выводит измененный массив
+
+        // Вывод измененного массива
         System.out.println("Отсортированный массив:");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -48,7 +82,7 @@ public class Main {
                     c = (char) (c + 'a' - 'A'); // Преобразуем символ в нижний регистр
                 }
                 if (c >= 'a' && c <= 'z') { // Если символ - буква нижнего регистра
-                    freq[c - 'a']++; // Увеличиваем соответствующий счётчик
+                    freq[c - 'a']++; // У еличиваем соответствующий счётчик
                 }
             }
         }
@@ -71,23 +105,23 @@ public class Main {
 
         // 4. спираль (это ужас)
         System.out.println("\nЭлементы массива в виде спирали (против часовой стрелки):");
-            // Начальные координаты для центра
+        // Начальные координаты для центра
         int x = N / 2;
         int y = N / 2;
         System.out.print(symbs[x][y] + " "); // Центральный элемент
-             // Направления движения: вверх, влево, вниз, вправо
-        int[][] Napravlenie = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+        // Направления движения: вверх, влево, вниз, вправо
+        int[][] napravlenie  = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
         int currentNapravlenie = 0; // Текущее направление движения
         int steps = 1;    // Количество шагов в текущем сегменте
         int count = 1;    // Счётчик пройденных элементов
-             // Пока не прошли все элементы массива
+        // Пока не прошли все элементы массива
         while (count < N * N) {
             // Два сегмента одинаковой длины перед увеличением длины сегмента
             for (int segment = 0; segment < 2; segment++) { // Повторяем дважды для каждого направления (по два сегмента в каждом направлении)
                 for (int step = 0; step < steps; step++) { // Для текущего сегмента выполняем 'steps' шагов
                     // Обновляем координаты
-                    x += Napravlenie[currentNapravlenie][0];
-                    y += Napravlenie[currentNapravlenie][1];
+                    x += napravlenie[currentNapravlenie][0];
+                    y += napravlenie[currentNapravlenie][1];
 
                     // Проверка на выход за пределы массива
                     if (x >= 0 && x < N && y >= 0 && y < N) {
@@ -116,36 +150,4 @@ public class Main {
             System.out.println(); // Переход на новую строку после каждого ряда
         }
     }
-    // блок подпрограмм
-    // делает подсчёт количества гласных в столбце
-    public static int countGlass(char[][] symbs, int columm, int stroka) {
-        int count = 0; // для подсчета всех гласных
-        for (int i = 0; i < stroka; i++) {
-            if (symbs[i][columm] == 'a' || symbs[i][columm] == 'e' || symbs[i][columm] == 'i' || symbs[i][columm] == 'o' || symbs[i][columm] == 'u' ||
-                    symbs[i][columm] == 'A' || symbs[i][columm] == 'E' || symbs[i][columm] == 'I' || symbs[i][columm] == 'O' || symbs[i][columm] == 'U') {
-                count++; // если символ гласная, то счетчик + 1
-            }
-        }
-        return count;
-    }
-
-    // подсчёт суммы аски-кодов в столбце
-    public static int sumAsc(char[][] symbs, int column, int stroka) {
-        int sum = 0;
-        for (int i = 0; i < stroka; i++) {
-            sum += symbs[i][column];   //считает сумму ascii
-        }
-        return sum;
-    }
-
-    // перемещение букв в строках
-    public static void swapColonn(char[][] symbs, int column1, int column2, int stroka) {
-        for (int i = 0; i < stroka; i++) {
-            char temp = symbs[i][column1];
-            symbs[i][column1] = symbs[i][column2];
-            symbs[i][column2] = temp;
-        }
-    }
-
-    // конец первого блока подпрограмм
 }
