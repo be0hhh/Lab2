@@ -159,7 +159,7 @@ public class Main {
                 symbs[i][j] = in.next().charAt(0);
             }
         }
-        // Сортировка столбцов по количеству гласных с использованием 3 подпрограмм
+        // Сортировка столбцов по количеству гласных
         // Переменная k в данном контексте отвечает за текущий индекс столбца,
         // который сравнивается с соседним столбцом в процессе сортировки массива по количеству гласных.
         // Алгоритм основан на пузырьковой сортировке, она сравнивает два соседних столбца с индексами k и k+1
@@ -170,8 +170,8 @@ public class Main {
                 // Подсчет гласных в столбце k
                 int glas1 = 0;
                 for (int i = 0; i < N; i++) {
-                    char ch = symbs[i][k];
-                    if ("aeiouAEIOU".indexOf(ch) >= 0) {
+                    char character = symbs[i][k];
+                    if ("aAeEiIoOuUyY".indexOf(character) >= 0) {
                         glas1++;
                     }
                 }
@@ -180,7 +180,7 @@ public class Main {
                 int glas2 = 0;
                 for (int i = 0; i < N; i++) {
                     char ch = symbs[i][k + 1];
-                    if ("aeiouAEIOU".indexOf(ch) >= 0) {
+                    if ("aAeEiIoOuUy".indexOf(ch) >= 0) {
                         glas2++;
                     }
                 }
@@ -255,7 +255,7 @@ public class Main {
         int y = N / 2;
         System.out.print(symbs[x][y] + " "); // Центральный элемент
         // Направления движения: вверх, влево, вниз, вправо
-        int[][] napravlenie = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+        int[][] napravlenie  = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
         int currentNapravlenie = 0; // Текущее направление движения
         int steps = 1;    // Количество шагов в текущем сегменте
         int count = 1;    // Счётчик пройденных элементов
